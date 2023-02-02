@@ -5,8 +5,9 @@ import (
 )
 
 func main() {
-	c := NewClient("192.168.1.100", "6600", "tcp")
+	c := NewFmtClient("192.168.1.100", "6600", "tcp")
 	defer c.Close()
 
-	fmt.Printf("Now playing: %v", c.NowPlaying())
+	lines := c.NowPlaying()
+	fmt.Printf("Now playing:\n\t%s\n\t%s", lines[0], lines[1])
 }
