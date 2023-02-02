@@ -9,6 +9,8 @@ import (
 
 type Client interface {
 	Close()
+
+	NowPlaying() Track
 }
 
 type client struct {
@@ -17,6 +19,14 @@ type client struct {
 
 func (c *client) Close() {
 	c.mpc.Close()
+}
+
+func (c *client) NowPlaying() Track {
+	attrs, err := c.mpc.CurrentSong()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return NewTrack(attrs)
 }
 
 func NewClient(host, port, protocol string) Client {
