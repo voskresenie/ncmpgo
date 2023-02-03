@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ 1.18.x, 1.19.x ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+       
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+          check-latest: true
+          cache: true
+
+      - name: Go environment
+        run: |
+          go version
+          go env
+          echo PATH is $PATH
+        shell: sh
+
+      - name: Install dependencies
+        run: make deps
+       
+      - name: Make build
+        run: make build
+
+      - name: Run tests
+        run: make test-json > test-results-${{ matrix.go-version }}.json
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test results (${{ matrix.go-version }})
+          path: test-results-${{ matrix.go-version }}.json
+
+      - name: Check gofmt
+        run: |
+          make lint
+          test `make lint | wc -l` = 0
+        shell: sh
