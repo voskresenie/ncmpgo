@@ -48,6 +48,6 @@ jobs:
 
       - name: Check gofmt
         run: |
-          make lint
-          test `make lint | wc -l` = 1
+          make lint 2>&1 >/dev/null | wc -l
+          test `make lint 2>&1 >/dev/null | wc -l` = 0
         shell: sh
