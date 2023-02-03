@@ -8,8 +8,7 @@ build: deps
 deps:
 	go mod download
 
-run:
-	go build -o ${BINARY_NAME} src/*.go
+run: build
 	./${BINARY_NAME}
 
 test:
@@ -17,6 +16,12 @@ test:
 
 test-quiet:
 	go test ./src
+
+test-json:
+	go test -json ./src
+
+lint:
+	gofmt -l ./src
 
 clean:
 	go clean
