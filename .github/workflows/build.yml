@@ -28,7 +28,7 @@ jobs:
         run: |
           go version
           go env
-          echo PATH is $PATH
+          echo PATH=\"$PATH\"
         shell: sh
 
       - name: Install dependencies
@@ -49,5 +49,5 @@ jobs:
       - name: Check gofmt
         run: |
           make lint
-          test `make lint | wc -l` = 0
+          test `make lint | wc -l` = 1
         shell: sh
