@@ -22,6 +22,7 @@ test-json:
 
 lint:
 	gofmt -l ./src
+	go mod tidy -v
 
 clean:
 	go clean
